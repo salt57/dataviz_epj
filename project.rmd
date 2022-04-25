@@ -13,17 +13,17 @@ library(flexdashboard)
 Column {data-width=500}
 -----------------------------------------------------------------------
 
-### pie chart of movies and tv shows
+### pie chart of movies and tv shows ~ arka
 
 
-### Table showing processed data
+### Table showing processed data ~ sourish
 
 ```{r}
 
 ```
 
 
-### stacked bar chart representation of shows and movies
+### stacked bar chart representation of shows and movies over the years ~ yash
 
 ```{r}
 
@@ -32,23 +32,23 @@ Column {data-width=500}
 Column {data-width=500}
 -----------------------------------------------------------------------
 
-### Heatmap of number of shows in a region
+### Heatmap of month vs year releases ~ arka
 
 ```{r}
 
 ```
 
-### regression chart of number of releases per year
+### regression chart of number of releases per year ~ arka
 
 ```{r}
 
 ```
 
-### bar chart of ratings of shows region wise
+### bar chart of ratings of shows region wise ~ prakhar
 
-### stacked bar chart of ratings and number of votes region wise
+### stacked bar chart of ratings and number of votes region wise ~ prakhar
 
-### regression of rating vs release year
+### regression of rating vs release year ~ yash
 
 ### Number of shows available in Netflix as a function of time
 ```{r}
@@ -87,6 +87,6 @@ df_show_categories %>% mutate(Show_Category = fct_infreq(Show_Category)) %>%
             geom_bar() + scale_x_discrete() + facet_wrap(~type, scales = 'free_x') + coord_cartesian(xlim = c(1,20)) + theme(axis.text.x=element_text(angle=90,hjust=1,vjust=0.5))
 ```
 
-### Correlation of parental rating and avg rating
+### Correlation of parental rating and avg rating ~ sourish
 
-### correlation of duration and avg rating
+### correlation of duration and avg rating ~ yash
