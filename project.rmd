@@ -23,7 +23,7 @@ Column {data-width=500}
 ```
 
 
-### Geospatial representation of shows and movies
+### stacked bar chart representation of shows and movies
 
 ```{r}
 
