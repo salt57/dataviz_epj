@@ -13,6 +13,9 @@ library(flexdashboard)
 Column {data-width=500}
 -----------------------------------------------------------------------
 
+### pie chart of movies and tv shows
+
+
 ### Table showing processed data
 
 ```{r}
@@ -83,3 +86,7 @@ df_show_categories %>% mutate(Show_Category = fct_infreq(Show_Category)) %>%
         ggplot(aes(x = Show_Category)) + 
             geom_bar() + scale_x_discrete() + facet_wrap(~type, scales = 'free_x') + coord_cartesian(xlim = c(1,20)) + theme(axis.text.x=element_text(angle=90,hjust=1,vjust=0.5))
 ```
+
+### Correlation of parental rating and avg rating
+
+### correlation of duration and avg rating
