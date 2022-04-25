@@ -46,3 +46,40 @@ Column {data-width=500}
 ### stacked bar chart of ratings and number of votes region wise
 
 ### regression of rating vs release year
+
+### Number of shows available in Netflix as a function of time
+```{r}
+library("dplyr")
+library("ggplot2")
+library("ggrepel")
+df_netflix <- read.csv("finalMergedNetflixData.csv")
+df_netflix$date_added <- as.Date(df_netflix$date_added, format = "%B %d, %Y")
+df_netflix
+df_by_date <- df_netflix %>% group_by(date_added,type) %>% summarise(addedToday = n()) %>% 
+            ungroup() %>% group_by(type) %>% mutate(Total_Number_of_Shows = cumsum(addedToday), label = if_else(date_added == max(date_added,na.rm = T), as.character(type), NA_character_))
+
+
+df_by_date  %>% 
+                ggplot(aes(x = date_added, y = Total_Number_of_Shows, color = type)) + geom_line(size = 2) + 
+                    theme_bw(base_size = 20) + 
+                    scale_x_date(date_breaks = '2 years', date_labels = "%Y") + 
+                    theme(legend.position = 'none') +
+                    geom_text_repel(aes(label = label), size = 8,na.rm = TRUE, nudge_y = 100)
+
+```
+
+### Show Categories: Correlations and most frequent
+
+``` {r}
+library("tidyr")
+library("forcats")
+df_show_categories <- df_netflix %>% 
+                        select(c('show_id','type','listed_in')) %>% 
+                        separate_rows(listed_in, sep = ',') %>%
+                        rename(Show_Category = listed_in)
+df_show_categories$Show_Category <- trimws(df_show_categories$Show_Category)
+head(df_show_categories)
+df_show_categories %>% mutate(Show_Category = fct_infreq(Show_Category)) %>% 
+        ggplot(aes(x = Show_Category)) + 
+            geom_bar() + scale_x_discrete() + facet_wrap(~type, scales = 'free_x') + coord_cartesian(xlim = c(1,20)) + theme(axis.text.x=element_text(angle=90,hjust=1,vjust=0.5))
+```
