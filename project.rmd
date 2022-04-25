@@ -35,7 +35,7 @@ Column {data-width=500}
 
 ```
 
-### regression chart of number
+### regression chart of number of releases per year
 
 ```{r}
 
