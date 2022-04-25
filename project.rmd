@@ -13,14 +13,14 @@ library(flexdashboard)
 Column {data-width=500}
 -----------------------------------------------------------------------
 
-### Chart A
+### Table showing processed data
 
 ```{r}
 
 ```
 
 
-### Chart B
+### Geospatial representation of shows and movies
 
 ```{r}
 
@@ -29,14 +29,20 @@ Column {data-width=500}
 Column {data-width=500}
 -----------------------------------------------------------------------
 
-### Chart C
+### Heatmap of number of shows in a region
 
 ```{r}
 
 ```
 
-### Chart D
+### regression chart of number
 
 ```{r}
 
 ```
+
+### bar chart of ratings of shows region wise
+
+### stacked bar chart of ratings and number of votes region wise
+
+### regression of rating vs release year
