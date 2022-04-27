@@ -15,7 +15,7 @@ library("DT")
 library("tidyr")
 library("forcats")
 df_netflix <- read.csv("finalMergedNetflixData.csv")
-df_netflix <- as.data.frame(data)
+df_netflix <- as.data.frame(df_netflix)
 ```
 
 Column {data-width=350}
@@ -27,7 +27,7 @@ Column {data-width=350}
 ### Table showing processed data ~ sourish
 
 ```{r}
-datatable(data)
+datatable(df_netflix)
 ```
 
 Column {data-width=500}
