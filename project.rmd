@@ -8,9 +8,17 @@ output:
 
 ```{r setup, include=FALSE}
 library(flexdashboard)
+library("dplyr")
+library("ggplot2")
+library("ggrepel")
+library("DT")
+library("tidyr")
+library("forcats")
+df_netflix <- read.csv("finalMergedNetflixData.csv")
+df_netflix <- as.data.frame(data)
 ```
 
-Column {data-width=500}
+Column {data-width=350}
 -----------------------------------------------------------------------
 
 ### pie chart of movies and tv shows ~ arka
@@ -19,18 +27,17 @@ Column {data-width=500}
 ### Table showing processed data ~ sourish
 
 ```{r}
-
+datatable(data)
 ```
 
-
+Column {data-width=500}
+-----------------------------------------------------------------------
 ### stacked bar chart representation of shows and movies over the years ~ yash
 
 ```{r}
 
 ```
 
-Column {data-width=500}
------------------------------------------------------------------------
 
 ### Heatmap of month vs year releases ~ arka
 
@@ -52,10 +59,6 @@ Column {data-width=500}
 
 ### Number of shows available in Netflix as a function of time
 ```{r}
-library("dplyr")
-library("ggplot2")
-library("ggrepel")
-df_netflix <- read.csv("finalMergedNetflixData.csv")
 df_netflix$date_added <- as.Date(df_netflix$date_added, format = "%B %d, %Y")
 df_netflix
 df_by_date <- df_netflix %>% group_by(date_added,type) %>% summarise(addedToday = n()) %>% 
@@ -74,8 +77,6 @@ df_by_date  %>%
 ### Show Categories: Correlations and most frequent
 
 ``` {r}
-library("tidyr")
-library("forcats")
 df_show_categories <- df_netflix %>% 
                         select(c('show_id','type','listed_in')) %>% 
                         separate_rows(listed_in, sep = ',') %>%
@@ -88,5 +89,14 @@ df_show_categories %>% mutate(Show_Category = fct_infreq(Show_Category)) %>%
 ```
 
 ### Correlation of parental rating and avg rating ~ sourish
+```{r}
+
+gg <- ggplot()
+gg <- gg + geom_point(data=df_netflix,
+                      aes(x=rating, y=averageRating, color=type))
+gg <- gg + labs(x="parental rating", y="average rating", title=NULL)
+gg <- gg + theme_bw()
+gg
+```
 
 ### correlation of duration and avg rating ~ yash
