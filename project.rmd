@@ -45,14 +45,22 @@ Column {data-width=500}
 ```
 
 
-### regression chart of number of releases per year ~ arka
+### line chart of number of releases per year ~ arka
 
 ```{r}
-a <- rle(sort(df_netflix$release_year))
-plot(a$values,a$lengths,xlab="Release Year",ylab="No. of Releases")
-k<-data.frame(a$lengths,a$values)
-abline(lm(a$lengths~a$values,data=k),col='red') 
 
+
+
+df_by_date <- df_netflix %>% group_by(release_year,type) %>% summarise(addedToday = n()) %>% 
+            ungroup() %>% group_by(type) %>% mutate(Total_Number_of_Shows = cumsum(addedToday), label = if_else(release_year == max(release_year,na.rm = T), as.character(type), NA_character_))
+
+
+df_by_date  %>% 
+                ggplot(aes(x = release_year, y = Total_Number_of_Shows, color = type)) + geom_line(size = 2) + 
+                    theme_bw(base_size = 20) + 
+                    theme(legend.position = 'none') +
+                    labs(x="Release Year", y="Count", title=NULL)+
+                    geom_text_repel(aes(label = label), size = 8,na.rm = TRUE, nudge_y = 100)
 
 ```
 
