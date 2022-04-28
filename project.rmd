@@ -62,7 +62,18 @@ abline(lm(a$lengths~a$values,data=k),col='red')
 
 ### stacked bar chart of ratings and number of votes region wise ~ prakhar
 
-### regression of rating vs release year ~ yash
+### regression of rating vs release year ~ sourish
+```{r}
+mean <- df_netflix %>% group_by(release_year) %>% summarise(mean_val = mean(averageRating))
+gg <- ggplot()
+gg <- gg + geom_point(data=df_netflix,
+                      aes(x=release_year, y=averageRating, color=type))
+gg <- gg + labs(x="Release Year", y="average rating", title=NULL)
+gg <- gg + stat_summary(fun.data=mean_cl_normal)
+gg <- gg + geom_line(data= mean, aes(x = release_year, y = mean_val, group = 1))
+gg <- gg + theme_bw()
+gg
+```
 
 ### Number of shows available in Netflix as a function of time
 ```{r}
@@ -98,7 +109,6 @@ df_show_categories %>% mutate(Show_Category = fct_infreq(Show_Category)) %>%
 ### Correlation of parental rating and avg rating ~ sourish
 ```{r}
 mean <- df_netflix %>% group_by(rating) %>% summarise(mean_val = mean(averageRating))
-mean
 gg <- ggplot()
 gg <- gg + geom_point(data=df_netflix,
                       aes(x=rating, y=averageRating, color=type))
@@ -108,7 +118,7 @@ gg <- gg + theme_bw()
 gg
 ```
 
-### correlation of duration and avg rating ~ yash
+### correlation of duration and avg rating ~ sourish
 ```{r}
 movies <- subset(df_netflix, type == "Movie")
 library(stringr)
