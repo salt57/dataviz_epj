@@ -15,7 +15,7 @@ library("DT")
 library("tidyr")
 library("forcats")
 df_netflix <- read.csv("finalMergedNetflixData.csv")
-df_netflix <- as.data.frame(df_netflix)
+df_netflix$date_added <- as.Date(df_netflix$date_added, format = "%d-%B-%Y")
 ```
 
 Column {data-width=350}
@@ -49,8 +49,6 @@ Column {data-width=500}
 
 ```{r}
 
-
-
 df_by_date <- df_netflix %>% group_by(release_year,type) %>% summarise(addedToday = n()) %>% 
             ungroup() %>% group_by(type) %>% mutate(Total_Number_of_Shows = cumsum(addedToday), label = if_else(release_year == max(release_year,na.rm = T), as.character(type), NA_character_))
 
@@ -83,8 +81,6 @@ gg
 
 ### Number of shows available in Netflix as a function of time
 ```{r}
-df_netflix$date_added <- as.Date(df_netflix$date_added, format = "%B %d, %Y")
-df_netflix
 df_by_date <- df_netflix %>% group_by(date_added,type) %>% summarise(addedToday = n()) %>% 
             ungroup() %>% group_by(type) %>% mutate(Total_Number_of_Shows = cumsum(addedToday), label = if_else(date_added == max(date_added,na.rm = T), as.character(type), NA_character_))
 
