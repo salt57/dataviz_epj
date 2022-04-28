@@ -18,16 +18,22 @@ df_netflix <- read.csv("finalMergedNetflixData.csv")
 df_netflix$date_added <- as.Date(df_netflix$date_added, format = "%d-%B-%Y")
 ```
 
-Column {data-width=350}
+Page 1
+=====================================  
+
+Column {data-Width=500}
 -----------------------------------------------------------------------
 
-### Table showing processed data ~ sourish
+### Table showing processed data
 
 ```{r}
-datatable(df_netflix)
+datatable(df_netflix, height = 500)
 ```
 
-### pie chart of movies and tv shows ~ arka
+Column {data-width=500}
+-----------------------------------------------------------------------
+
+### pie chart of movies and tv shows
 ```{r}
 ratio=table(as.matrix(df_netflix$type))
 pie(ratio, main = "Movies and TV shows",col = rainbow(length(ratio)))
@@ -36,16 +42,36 @@ legend("topright", c("Movies","TV Shows"),
 
 ```
 
+Page 2
+=====================================
+
 Column {data-width=500}
 -----------------------------------------------------------------------
-### stacked bar chart representation of shows and movies over the years ~ yash
+### stacked bar chart representation of shows and movies over the years
 
 ```{r}
+ggplot(df_netflix, aes(fill=type, x=release_year)) + 
+    geom_bar(position="stack", stat="bin", color = "black", binwidth = 1)
 
 ```
 
 
-### line chart of number of releases per year ~ arka
+### Show Categories: Correlations and most frequent
+
+``` {r}
+df_show_categories <- df_netflix %>% 
+                        select(c('show_id','type','listed_in')) %>% 
+                        separate_rows(listed_in, sep = ',') %>%
+                        rename(Show_Category = listed_in)
+df_show_categories$Show_Category <- trimws(df_show_categories$Show_Category)
+df_show_categories %>% mutate(Show_Category = fct_infreq(Show_Category)) %>% 
+        ggplot(aes(x = Show_Category)) + 
+            geom_bar(color = "#F8766D", fill = "#F8766D") + scale_x_discrete() + facet_wrap(~type, scales = 'free_x') + coord_cartesian(xlim = c(1,20)) + theme(axis.text.x=element_text(angle=90,hjust=1,vjust=0.5))
+```
+
+Column {data-width=500}
+-----------------------------------------------------------------------
+### line chart of number of releases per year
 
 ```{r}
 
@@ -60,23 +86,6 @@ df_by_date  %>%
                     labs(x="Release Year", y="Count", title=NULL)+
                     geom_text_repel(aes(label = label), size = 8,na.rm = TRUE, nudge_y = 100)
 
-```
-
-### bar chart of ratings of shows region wise ~ prakhar
-
-### stacked bar chart of ratings and number of votes region wise ~ prakhar
-
-### regression of rating vs release year ~ sourish
-```{r}
-mean <- df_netflix %>% group_by(release_year) %>% summarise(mean_val = mean(averageRating))
-gg <- ggplot()
-gg <- gg + geom_point(data=df_netflix,
-                      aes(x=release_year, y=averageRating, color=type))
-gg <- gg + labs(x="Release Year", y="average rating", title=NULL)
-gg <- gg + stat_summary(fun.data=mean_cl_normal)
-gg <- gg + geom_line(data= mean, aes(x = release_year, y = mean_val, group = 1))
-gg <- gg + theme_bw()
-gg
 ```
 
 ### Number of shows available in Netflix as a function of time
@@ -94,21 +103,42 @@ df_by_date  %>%
 
 ```
 
-### Show Categories: Correlations and most frequent
+Page 3
+===================================== 
 
-``` {r}
-df_show_categories <- df_netflix %>% 
-                        select(c('show_id','type','listed_in')) %>% 
-                        separate_rows(listed_in, sep = ',') %>%
-                        rename(Show_Category = listed_in)
-df_show_categories$Show_Category <- trimws(df_show_categories$Show_Category)
-head(df_show_categories)
-df_show_categories %>% mutate(Show_Category = fct_infreq(Show_Category)) %>% 
-        ggplot(aes(x = Show_Category)) + 
-            geom_bar() + scale_x_discrete() + facet_wrap(~type, scales = 'free_x') + coord_cartesian(xlim = c(1,20)) + theme(axis.text.x=element_text(angle=90,hjust=1,vjust=0.5))
+
+Column {data-width=500}
+-----------------------------------------------------------------------
+### bar chart of ratings of shows region wise
+```{r}
+d <- transform(df_netflix, normRating = averageRating / numVotes *100)
+d$normRating <- format(d$normRating, scientific = FALSE)
+ggplot(d, aes(x = region, y = normRating, fill = region)) + 
+  geom_bar(stat = "identity") +
+  labs(x=NULL, y="normalised rating", title = NULL)+
+  theme(axis.title.x=element_blank(),
+        axis.text.x=element_blank(),
+        axis.ticks.x=element_blank())
 ```
 
-### Correlation of parental rating and avg rating ~ sourish
+
+### regression of rating vs release year
+```{r}
+mean <- df_netflix %>% group_by(release_year) %>% summarise(mean_val = mean(averageRating))
+gg <- ggplot()
+gg <- gg + geom_point(data=df_netflix,
+                      aes(x=release_year, y=averageRating, color=type))
+gg <- gg + labs(x="Release Year", y="average rating", title=NULL)
+gg <- gg + stat_summary(fun.data=mean_cl_normal)
+gg <- gg + geom_line(data= mean, aes(x = release_year, y = mean_val, group = 1))
+gg <- gg + theme_bw()
+gg
+```
+
+Column {data-width=500}
+-----------------------------------------------------------------------
+
+### Correlation of parental rating and avg rating
 ```{r}
 mean <- df_netflix %>% group_by(rating) %>% summarise(mean_val = mean(averageRating))
 gg <- ggplot()
@@ -120,7 +150,7 @@ gg <- gg + theme_bw()
 gg
 ```
 
-### correlation of duration and avg rating ~ sourish
+### correlation of duration and avg rating
 ```{r}
 movies <- subset(df_netflix, type == "Movie")
 library(stringr)
