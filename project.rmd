@@ -21,14 +21,13 @@ df_netflix <- as.data.frame(df_netflix)
 Column {data-width=350}
 -----------------------------------------------------------------------
 
-### pie chart of movies and tv shows ~ arka
-
-
 ### Table showing processed data ~ sourish
 
 ```{r}
 datatable(df_netflix)
 ```
+
+### pie chart of movies and tv shows ~ arka
 
 Column {data-width=500}
 -----------------------------------------------------------------------
@@ -38,12 +37,6 @@ Column {data-width=500}
 
 ```
 
-
-### Heatmap of month vs year releases ~ arka
-
-```{r}
-
-```
 
 ### regression chart of number of releases per year ~ arka
 
@@ -90,13 +83,39 @@ df_show_categories %>% mutate(Show_Category = fct_infreq(Show_Category)) %>%
 
 ### Correlation of parental rating and avg rating ~ sourish
 ```{r}
-
+mean <- df_netflix %>% group_by(rating) %>% summarise(mean_val = mean(averageRating))
+mean
 gg <- ggplot()
 gg <- gg + geom_point(data=df_netflix,
                       aes(x=rating, y=averageRating, color=type))
 gg <- gg + labs(x="parental rating", y="average rating", title=NULL)
+gg <- gg + geom_line(data= mean, aes(x = rating, y = mean_val, group = 1))
 gg <- gg + theme_bw()
 gg
 ```
 
 ### correlation of duration and avg rating ~ yash
+```{r}
+movies <- subset(df_netflix, type == "Movie")
+library(stringr)
+
+d = movies$duration
+
+na_to_0 = function(x) {x[is.na(x)] = 0; x}
+
+to_minutes = function(s) {
+
+  hr = na_to_0(60 *  as.numeric(str_replace(str_extract(s, "[0-9]{1,2} h"), " h", "")))
+  min = na_to_0(as.numeric(str_replace(str_extract(s, "[0-9]{1,3} min"), " min", "")))
+
+  hr + min
+}
+
+movies$duration <- to_minutes(d) 
+gg <- ggplot(data=movies,
+                      aes(x=duration, y=averageRating), col = "#F8766D")
+gg <- gg + geom_line(stat = "summary", fun = "mean", color = "#F8766D")
+gg <- gg + geom_smooth()
+gg <- gg + labs(x="Duration", y="average rating", title=NULL)
+gg
+```
