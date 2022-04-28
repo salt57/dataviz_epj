@@ -21,6 +21,12 @@ df_netflix <- as.data.frame(df_netflix)
 Column {data-width=350}
 -----------------------------------------------------------------------
 
+### Table showing processed data ~ sourish
+
+```{r}
+datatable(df_netflix)
+```
+
 ### pie chart of movies and tv shows ~ arka
 ```{r}
 ratio=table(as.matrix(df_netflix$type))
@@ -29,14 +35,6 @@ legend("topright", c("Movies","TV Shows"),
    fill = rainbow(length(ratio)))
 
 ```
-
-### Table showing processed data ~ sourish
-
-```{r}
-datatable(df_netflix)
-```
-
-### pie chart of movies and tv shows ~ arka
 
 Column {data-width=500}
 -----------------------------------------------------------------------
