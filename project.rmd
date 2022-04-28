@@ -21,6 +21,15 @@ df_netflix <- as.data.frame(df_netflix)
 Column {data-width=350}
 -----------------------------------------------------------------------
 
+### pie chart of movies and tv shows ~ arka
+```{r}
+ratio=table(as.matrix(df_netflix$type))
+pie(ratio, main = "Movies and TV shows",col = rainbow(length(ratio)))
+legend("topright", c("Movies","TV Shows"),
+   fill = rainbow(length(ratio)))
+
+```
+
 ### Table showing processed data ~ sourish
 
 ```{r}
@@ -41,6 +50,11 @@ Column {data-width=500}
 ### regression chart of number of releases per year ~ arka
 
 ```{r}
+a <- rle(sort(df_netflix$release_year))
+plot(a$values,a$lengths,xlab="Release Year",ylab="No. of Releases")
+k<-data.frame(a$lengths,a$values)
+abline(lm(a$lengths~a$values,data=k),col='red') 
+
 
 ```
 
